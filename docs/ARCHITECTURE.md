@@ -8,7 +8,7 @@ Contains provider-specific protocol details only; never exposes provider credent
 
 ## Dependencies
 
-aether-ai-gateway contracts and compatible WoHo AI DevKit provider interfaces.
+aether-ai-gateway public contracts; optional vendor SDKs require explicit version/license review and an accepted ADR.
 
 ## Data and control flow
 
