@@ -46,3 +46,7 @@ When implementation begins, explain security invariants, state transitions, retr
 - [Research and licenses](RESEARCH_AND_LICENSES.md)
 - [Work log](WORKLOG.md)
 - [Master repository spec](https://github.com/Monupatel62/aether-ai-platform/blob/main/docs/repositories/aether-ai-providers.md)
+
+## Provider selection gate
+
+The current DevKit repository declares `@woho/provider-openai 0.2.22` as an OpenAI-compatible HTTP/SSE adapter. This is not evidence of broad native provider coverage. Aether should define provider capabilities explicitly and verify each additional adapter separately. Compare the DevKit path with DIAL Core in the [master gateway evaluation](https://github.com/Monupatel62/aether-ai-platform/blob/main/docs/DIAL_ADOPTION_EVALUATION.md); do not duplicate retry/fallback logic across layers.
