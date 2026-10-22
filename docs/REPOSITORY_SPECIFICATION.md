@@ -1,6 +1,6 @@
 # Repository specification: aether-ai-providers
 
-**Status:** Documentation baseline copied from the Aether AI master specification. Implementation status must be verified separately.
+**Status:** Repository exists; documentation-only on the inspected `main` branch. No application implementation is present in the audited tree.
 
 ## Mission
 
@@ -12,6 +12,7 @@ Provider protocol and credential handling only; no product business rules.
 
 ## Dependencies and connections
 
+Public provider interface/capability contract consumed by aether-ai-gateway; optional vendor SDKs require explicit version/license review and an accepted ADR.
 
 ## Owned capabilities
 
