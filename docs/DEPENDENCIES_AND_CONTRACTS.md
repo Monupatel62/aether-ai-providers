@@ -8,7 +8,7 @@ Provider adapter interface and capability registry
 
 ## Direct dependencies
 
-gateway and optionally compatible DevKit provider interfaces.
+aether-ai-gateway public contracts; optional vendor SDKs require explicit version/license review and an accepted ADR.
 
 ## Required rules
 
