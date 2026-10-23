@@ -1,39 +1,25 @@
 # aether-ai-providers
 
-> **Status: Documentation phase.** No application code or production deployment has been started in this repository.
+**Status:** Initial provider-neutral contract and adapter registry implemented on a feature branch. No vendor SDK or real provider adapter has been selected; production readiness is not claimed.
 
-## Purpose
+## Implemented
 
-Provider adapters and capability metadata for hosted and self-hosted model APIs.
+- [Provider-neutral source](src/index.js): request/capability validation, normalized safe errors, adapter registry, normalized completion response.
+- [Unit tests](test/provider.test.js): malformed requests, capability validation, duplicate adapters, streaming capability checks, error redaction, adapter failure normalization.
+- Dependency-free Node.js package and Node 20/22 CI workflow.
 
-## Responsibility boundary
+## Boundaries and limitations
 
-Isolates provider-specific request/response formats and credentials from product logic.
-
-## Dependencies
-
-aether-ai-gateway contracts; optional vendor SDKs require explicit version/license review and an accepted ADR.
-
-## Project rules
-
-- No implementation starts until the documentation and cross-repository contracts are reviewed.
-- Do not commit secrets, API keys, user data, or production credentials.
-- Public interfaces, security decisions, and non-obvious implementation choices must be documented.
+Provider adapters own vendor wire formats and credentials. The gateway owns routing, product policy, and retry/fallback decisions. This package currently includes no vendor-specific implementation, streaming transport, secret store integration, or live-provider smoke test. The caller must provide credentials and timeouts through a trusted adapter boundary; do not pass credentials in request objects or log raw vendor errors.
 
 ## Documentation
 
-- [Project specification](docs/PROJECT_SPEC.md)
+- [Project specification](docs/REPOSITORY_SPECIFICATION.md)
+- [Project spec](docs/PROJECT_SPEC.md)
 - [Architecture and connections](docs/ARCHITECTURE.md)
 - [Dependencies and contracts](docs/DEPENDENCIES_AND_CONTRACTS.md)
-- [Implementation plan and acceptance criteria](docs/IMPLEMENTATION_PLAN.md)
-- [Research and license notes](docs/RESEARCH_AND_LICENSES.md)
-- [Repository-specific technical design and test plan](docs/TECHNICAL_DESIGN.md)
-- [Repository-specific security review checklist](docs/SECURITY_REVIEW.md)
-- [Engineering and commenting standard](docs/ENGINEERING_STANDARD.md)
-- [Work log and decisions](docs/WORKLOG.md)
-- [Master 33-repository catalog](https://github.com/Monupatel62/aether-ai-platform/blob/main/docs/REPOSITORY_CATALOG.md)
-- [Continuity handoff for new chats](https://github.com/Monupatel62/aether-ai-platform/blob/main/docs/WORK_HANDOFF.md)
-
-## Before coding
-
-Read the project specification, architecture, contracts, implementation plan, and work log. Update the docs in the same change whenever behavior, an API contract, a dependency, or a security boundary changes.
+- [Implementation plan](docs/IMPLEMENTATION_PLAN.md)
+- [Technical design](docs/TECHNICAL_DESIGN.md)
+- [Security review](docs/SECURITY_REVIEW.md)
+- [Engineering standard](docs/ENGINEERING_STANDARD.md)
+- [Master catalog](https://github.com/Monupatel62/aether-ai-platform/blob/main/docs/REPOSITORY_CATALOG.md)
