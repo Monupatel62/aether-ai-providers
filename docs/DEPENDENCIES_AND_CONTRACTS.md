@@ -4,15 +4,15 @@
 
 ## Contract area
 
-Provider adapter interface and capability registry
+Provider adapter interface and capability registry. This repository owns the provider abstraction consumed by the gateway.
 
 ## Direct dependencies
 
-aether-ai-gateway public contracts; optional vendor SDKs require explicit version/license review and an accepted ADR.
+Optional vendor SDKs only, after explicit version/license review and an accepted ADR. Provider adapters must not depend on or import `aether-ai-gateway`; the gateway consumes this repository's public provider contract and composes adapters at the application boundary.
 
 ## Required rules
 
-Each adapter declares chat/embeddings/tools/streaming capabilities, auth method, limits, supported parameters, normalized errors, and safe retry rules.
+Each adapter declares chat/embeddings/tools/streaming capabilities, auth method, limits, supported parameters, normalized errors, and safe retry rules. Keep provider credentials server-side; never expose them to browsers or ordinary logs. Provider/model differences must be surfaced as capabilities rather than assuming feature parity.
 
 ## Contract governance
 
@@ -22,8 +22,6 @@ Each adapter declares chat/embeddings/tools/streaming capabilities, auth method,
 - Package interfaces must distinguish public stable exports from internal implementation details.
 - No service may read another service's private tables or import downstream application internals.
 - Any breaking change must include consumer inventory, migration notes, staged rollout/rollback plan, and an update to affected repository specs.
-- Provider/model differences must be surfaced as capabilities; do not claim all models support the same features.
-- Never expose provider credentials or raw sensitive upstream errors to browsers or ordinary logs.
 
 ## Review checklist
 
