@@ -12,5 +12,6 @@ export type {
   ProviderMessage,
   ProviderMessageRole,
   ProviderStreamEvent,
+  ProviderToolCall,
   ProviderUsage
 } from "./contracts.js";
