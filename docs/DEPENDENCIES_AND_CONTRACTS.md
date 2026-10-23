@@ -8,7 +8,11 @@ Provider adapter interface and capability registry
 
 ## Direct dependencies
 
-aether-ai-gateway public contracts; optional vendor SDKs require explicit version/license review and an accepted ADR.
+Only low-level shared contracts required by provider adapters. Optional vendor SDKs require explicit version/license review and an accepted ADR. Provider adapters must not depend on or import `aether-ai-gateway` implementation.
+
+## Gateway boundary
+
+`aether-ai-providers` owns the provider-neutral adapter interface and capability declarations. `aether-ai-gateway` consumes this public contract and composes/registers adapters. This dependency direction prevents a provider-to-gateway package cycle.
 
 ## Required rules
 
