@@ -154,10 +154,6 @@ export function createOpenAICompatibleAdapter({
       const request = validateCompletionRequest(requestInput);
       if (request.stream) throw new ProviderContractError("unsupported", "Streaming is not supported by this adapter");
       if (signal?.aborted) throw new ProviderContractError("timeout", "Provider request was cancelled");
-      let key;
-      try { key = await getApiKey({ providerId: adapterId, signal }); } catch { throw new ProviderContractError("authentication", "Provider credentials are unavailable"); }
-      if (typeof key !== "string" || !key.trim() || /[\r\n]/.test(key)) throw new ProviderContractError("authentication", "Provider credentials are unavailable");
-
       const body = { model: request.model, messages: request.messages };
       if (request.maxOutputTokens !== undefined) body.max_tokens = request.maxOutputTokens;
       if (request.temperature !== undefined) body.temperature = request.temperature;
@@ -175,6 +171,10 @@ export function createOpenAICompatibleAdapter({
       });
       timeout = setTimeout(() => { timedOut = true; controller.abort(); }, timeoutMs);
       try {
+        let key;
+        try { key = await Promise.race([Promise.resolve().then(() => getApiKey({ providerId: adapterId, signal: controller.signal })), aborted]); }
+        catch (error) { if (error instanceof ProviderContractError && error.code === "timeout") throw error; throw new ProviderContractError("authentication", "Provider credentials are unavailable"); }
+        if (typeof key !== "string" || !key.trim() || /[\r\n]/.test(key)) throw new ProviderContractError("authentication", "Provider credentials are unavailable");
         const response = await Promise.race([
           Promise.resolve().then(() => fetchImpl(endpoint, {
             method: "POST",
@@ -227,7 +227,8 @@ function validProviderBaseUrl(value, allowedHosts) {
 }
 
 async function readProviderResponse(response, maxBytes) {
-  if (!response || !response.body || typeof response.body.getReader !== "function") {
+  if (!response || typeof response.text !== "function") throw new ProviderContractError("provider_error", "Provider returned an invalid response");
+  if (!response.body || typeof response.body.getReader !== "function") {
     const text = await response.text();
     if (Buffer.byteLength(text) > maxBytes) throw new ProviderContractError("provider_error", "Provider response exceeds the configured limit");
     return text;
