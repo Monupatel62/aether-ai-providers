@@ -22,22 +22,27 @@ export interface ProviderUsage {
   readonly totalTokens: number;
 }
 
+export interface ProviderToolCall {
+  readonly id: string;
+  readonly name: string;
+  /** JSON-encoded arguments; validate against the registered tool schema before execution. */
+  readonly argumentsJson: string;
+}
+
 export interface ProviderChatResponse {
   readonly requestId: string;
   readonly providerId: string;
   readonly model: string;
   readonly content: string;
   readonly finishReason: "stop" | "length" | "tool_call" | "other";
+  readonly toolCalls?: readonly ProviderToolCall[];
   readonly usage?: ProviderUsage;
 }
 
-export interface ProviderStreamEvent {
-  readonly type: "text_delta" | "completed";
-  readonly requestId: string;
-  readonly text?: string;
-  readonly finishReason?: ProviderChatResponse["finishReason"];
-  readonly usage?: ProviderUsage;
-}
+export type ProviderStreamEvent =
+  | { readonly type: "text_delta"; readonly requestId: string; readonly text: string }
+  | { readonly type: "tool_call_delta"; readonly requestId: string; readonly toolCallId: string; readonly name?: string; readonly argumentsDelta?: string }
+  | { readonly type: "completed"; readonly requestId: string; readonly finishReason: ProviderChatResponse["finishReason"]; readonly usage?: ProviderUsage };
 
 export interface ProviderEmbeddingRequest {
   readonly schemaVersion: "1";
